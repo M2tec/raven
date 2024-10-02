@@ -46,16 +46,11 @@ function fetchAllPosts(data, callback) {
   );
 }
 
-async function getBase64(data) {
-
-  return base64Data;
-}
-
 async function setTweet(tweetObject) {
   const gc = window.gc
 
   let tweetData = tweetInput.value;
-  let tweetDataBase64 = await gc.encodings.base64url.encoder(tweetData);
+  let tweetDataBase64 = gc.utils.Buffer.from(tweetData).toString("hex")
 
   console.log(tweetDataBase64);
 
@@ -65,7 +60,7 @@ async function setTweet(tweetObject) {
     "description": "You are about to upload selected files to a GCFS Disk named 'raven'",
     "type": "script",
     "args": {
-      "postDataHex": { tweetDataBase64 }
+      "postDataHex": tweetDataBase64
     },
     "run": {
       "postId": {
@@ -85,7 +80,7 @@ async function setTweet(tweetObject) {
       },
       "buildTxs": {
         "type": "buildFsTxs",
-        "description": "Updated with GameChanger Wallet at Wed Oct 02 2024 11:28:21 G...",
+        "description": "Raven permatweet",
         "assetName": "raven",
         "replicas": "1",
         "layers": "{get('cache.fs')}"
@@ -130,15 +125,17 @@ async function setTweet(tweetObject) {
 
 async function main() {
     const postCache = {}
-    let userId = "1170d12887c70593e40938a5ff1832f9eb2b8e4a328a982621b36a57"
-    const url = `https://preprod-gcfs.onrender.com/search/?query=[{"policyId":"${userId}","keyWord":".txt"}]&format=url`;
+    let userId = "386bec6c6199a40890abd7604b60bf43089d9fb1120a3d42198946b9"
+    // const url = `https://preprod-gcfs.onrender.com/search/?query=[{"policyId":"${userId}","keyWord":".post.json"}]&format=url`;
+    const url = `https://preprod-gcfs.onrender.com/search/?query=[{"policyId":"${userId}", "assetName": "raven"}]&format=url&foo=bar`;
     let list = (await fetchJSON(url)).items;
     console.log(list)
 
     async function updateUI() {
       console.log(postCache);
       const postsElements = Object.entries(postCache).map(([url, content]) => {
-        return `<div title="${url}">${content}</div>`
+        console.log("https://preprod-gcfs.onrender.com" + url);
+        return `<div class="post" title="${url}">${content}</div>`
       })
       tweetsList.innerHTML = `<div>${postsElements.join("")}</div>`;
     }
@@ -152,3 +149,4 @@ async function main() {
 window.onload = function () {
   main();
 }
+

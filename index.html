@@ -7,7 +7,8 @@
     <title>Simple Twitter Clone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <script src='https://cdn.jsdelivr.net/npm/@gamechanger-finance/gc/dist/browser.min.js'></script>        
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
@@ -22,17 +23,15 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <textarea class="form-control" id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
+                    <textarea class="form-control" onchange="setTweet()" id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
                 </div>
-                <button class="btn btn-primary mb-3" id="tweetButton">Tweet</button>
+                
                 <div id="tweetsContainer"></div>
-
-
                 <div class="d-grid gap-2">
-                    <a id="connectBtn" 
-                      onclick='fetchFromAPI("c9aaf78c6dbcfa688d76f320a7e6e2e011b526a628d3e61a3040aa5e")'
+                    <a id="tweetButton"  target="_blank" href='http://www.m2tec.nl' 
+                      onclick="window.open(this.href, 'dapp connection', 'width=400,height=600'); return false;"
                       style="text-decoration:none; outline:none;"
-                      class="btn btn-primary"><strong>Query friends</strong></a>
+                      class="btn btn-primary"><strong>Tweet</strong></a>
                   </div>
 
                 <div id="tweets"></div>

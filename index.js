@@ -131,13 +131,32 @@ async function main() {
     let list = (await fetchJSON(url)).items;
     console.log(list)
 
+    const escapeHtml = (unsafe) => {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+
     async function updateUI() {
       console.log(postCache);
+
       const postsElements = Object.entries(postCache).map(([url, content]) => {
         console.log("https://preprod-gcfs.onrender.com" + url);
-        return `<div class="post" title="${url}">${content}</div>`
+        const sanitizedContent = escapeHtml(content);
+            
+        const preElement = document.createElement('pre');
+        preElement.className = 'post';
+        preElement.title = url;
+        preElement.innerText = sanitizedContent;
+      
+        console.log(preElement)
+        return preElement
       })
-      tweetsList.innerHTML = `<div>${postsElements.join("")}</div>`;
+      tweetsList.innerHTML = "";
+      postsElements.forEach(el=>tweetsList.append(el));
     }
 
     fetchAllPosts(list, (url, content) => {
